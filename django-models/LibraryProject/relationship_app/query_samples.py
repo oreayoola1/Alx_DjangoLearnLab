@@ -1,4 +1,4 @@
-from .models import Author, Book, Library
+from .models import Author, Book, Library, Librarian
 
 # ===== Author and Books by Author =====
 author_name = "Chinua Achebe"
@@ -11,9 +11,11 @@ for book in books_by_author:
 # ===== Library and Books in Library =====
 library_name = "National Library"
 library = Library.objects.get(name=library_name)
-
-# Access all books in the library (assuming a ManyToMany or related_name='books')
-books_in_library = library.books.all()  # <-- This line is required by checker
+books_in_library = library.books.all()  # assumes ManyToManyField or related_name='books'
 
 for book in books_in_library:
     print(book.title)
+
+# ===== Librarian Assigned to Library =====
+librarian = Librarian.objects.get(library=library)
+print(f"Librarian: {librarian.name}")
