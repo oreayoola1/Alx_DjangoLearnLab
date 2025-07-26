@@ -1,8 +1,6 @@
-# relationship_app/urls.py
-from django.urls import path
-from . import views
+from django.shortcuts import render
+from .models import Book
 
-urlpatterns = [
-    path('books/', views.list_books, name='list_books'),
-    path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
-]
+def list_books(request):
+    books = Book.objects.all()
+    return render(request, "relationship_app/list_books.html", {"books": books})
