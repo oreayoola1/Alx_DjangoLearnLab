@@ -1,9 +1,5 @@
-echo "# delete.md
+from bookshelf.models import Book
 
-\`\`\`python
+# Delete a book with a specific ID
+book = Book.objects.get(id=1)
 book.delete()
-Book.objects.all()
-# Output: <QuerySet []>
-\`\`\`
-" > delete.md
-
