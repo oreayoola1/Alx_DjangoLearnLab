@@ -1,5 +1,9 @@
 from django.db import models
+<<<<<<< HEAD
 from django.contrib.auth.models import User
+=======
+
+>>>>>>> e7580ffb8bc426a3eadaf316d6db45b07b6cb357
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
@@ -26,6 +30,7 @@ class Librarian(models.Model):
 
     def __str__(self):
         return self.name
+<<<<<<< HEAD
 class UserProfile(models.Model):
     ROLE_CHOICES = (
         ('Admin', 'Admin'),
@@ -37,3 +42,5 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
+=======
+>>>>>>> e7580ffb8bc426a3eadaf316d6db45b07b6cb357

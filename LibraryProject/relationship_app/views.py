@@ -2,7 +2,11 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
+<<<<<<< HEAD
 from django.shortcuts import render, redirect
+=======
+
+>>>>>>> e7580ffb8bc426a3eadaf316d6db45b07b6cb357
 
 # Registration view
 def register_view(request):
