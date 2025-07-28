@@ -1,9 +1,6 @@
 from django.db import models
-<<<<<<< HEAD
 from django.contrib.auth.models import User
-=======
 
->>>>>>> e7580ffb8bc426a3eadaf316d6db45b07b6cb357
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
