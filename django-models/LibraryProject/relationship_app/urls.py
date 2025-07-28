@@ -17,7 +17,6 @@ urlpatterns = [
     # ✅ Custom register view
     path('register/', views.register, name='register'),
 ]
-<<<<<<< HEAD
 from django.urls import path
 from . import views
 
@@ -30,5 +29,3 @@ urlpatterns = [
     path('librarian-only/', views.librarian_view, name='librarian_view'),
     path('member-only/', views.member_view, name='member_view'),
 ]
-=======
->>>>>>> e7580ffb8bc426a3eadaf316d6db45b07b6cb357
