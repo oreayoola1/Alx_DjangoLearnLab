@@ -88,3 +88,9 @@ def delete_book(request, pk):
 
 def home(request):
      return render(request, 'relationship_app/home.html')
+# Avoid raw SQL – using ORM to prevent SQL injection
+
+query = request.GET.get('q')
+if query:
+    # Use __icontains for case-insensitive safe lookup
+    books = Book.objects.filter(title__icontains=query)
