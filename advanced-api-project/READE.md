@@ -10,3 +10,7 @@
 ## Permissions
 - Public can read data.
 - Only logged-in users can create, update, or delete.
+### Filtering, Searching, and Ordering
+- **Filter**: `/books/?publication_year=2020`
+- **Search**: `/books/?search=Rowling`
+- **Order**: `/books/?ordering=-title`
