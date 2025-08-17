@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 from .views import BlogLoginView, BlogLogoutView, register, profile
 from django.contrib.auth.decorators import login_required
 from .views import (
@@ -8,6 +9,10 @@ from .views import (
 
 urlpatterns = [
     path('', PostListView.as_view(), name='home'),
+    # Backwards-compatible singular URLs -> redirect to canonical plural URLs
+    path('post/new/', RedirectView.as_view(pattern_name='post-create', permanent=False)),
+    path('post/<int:pk>/update/', RedirectView.as_view(pattern_name='post-update', permanent=False)),
+    path('post/<int:pk>/delete/', RedirectView.as_view(pattern_name='post-delete', permanent=False)),
     path("login/", BlogLoginView.as_view(), name="login"),
     path("logout/", BlogLogoutView.as_view(), name="logout"),
     path("register/", register, name="register"),
