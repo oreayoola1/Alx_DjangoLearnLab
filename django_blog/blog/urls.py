@@ -16,6 +16,7 @@ urlpatterns = [
     path('post/<int:pk>/delete/', RedirectView.as_view(pattern_name='post-delete', permanent=False)),
     # Backwards-compatible comment URL aliases
     path('post/<int:post_pk>/comments/new/', RedirectView.as_view(pattern_name='comment-create', permanent=False)),
+    path('post/<int:pk>/comments/new/', RedirectView.as_view(pattern_name='comment-create', permanent=False)),
     path('comment/<int:pk>/update/', RedirectView.as_view(pattern_name='comment-update', permanent=False)),
     path('comment/<int:pk>/delete/', RedirectView.as_view(pattern_name='comment-delete', permanent=False)),
     path("login/", BlogLoginView.as_view(), name="login"),
