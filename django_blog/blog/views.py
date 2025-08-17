@@ -62,6 +62,16 @@ class TagPostListView(ListView):
         return Post.objects.filter(tags__name=tag_name).order_by('-published_date')
 
 
+class PostByTagListView(TagPostListView):
+    """Accepts a slug like 'web-development' and maps it to tag name 'web development'."""
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        if not tag_slug:
+            return super().get_queryset()
+        tag_name = tag_slug.replace('-', ' ')
+        return Post.objects.filter(tags__name__iexact=tag_name).order_by('-published_date')
+
+
 def search(request):
     query = request.GET.get('q', '')
     results = Post.objects.none()
