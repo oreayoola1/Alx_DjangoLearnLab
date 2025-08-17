@@ -2,6 +2,10 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile, Post, Comment
+try:
+    from taggit.forms import TagWidget
+except Exception:
+    TagWidget = None
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -32,7 +36,10 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content']
 
-    tags = forms.CharField(required=False, help_text='Comma-separated tags', widget=forms.TextInput())
+    if TagWidget:
+        tags = forms.CharField(required=False, help_text='Comma-separated tags', widget=TagWidget())
+    else:
+        tags = forms.CharField(required=False, help_text='Comma-separated tags', widget=forms.TextInput())
 
 
 class CommentForm(forms.ModelForm):
