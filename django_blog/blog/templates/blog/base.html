@@ -28,6 +28,12 @@
                 {% endif %}
             </ul>
         </nav>
+        <div style="margin-top:8px;">
+            <form action="{% url 'search' %}" method="get">
+                <input type="text" name="q" placeholder="Search posts..." />
+                <button type="submit">Search</button>
+            </form>
+        </div>
     </header>
 
     {% if messages %}

@@ -32,6 +32,8 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content']
 
+    tags = forms.CharField(required=False, help_text='Comma-separated tags', widget=forms.TextInput())
+
 
 class CommentForm(forms.ModelForm):
     class Meta:

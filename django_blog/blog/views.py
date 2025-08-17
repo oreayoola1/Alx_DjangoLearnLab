@@ -6,7 +6,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import RegistrationForm, UserUpdateForm, ProfileForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Post
+from .models import Post, Tag
+from django.views.generic import ListView
+from django.db.models import Q
 from .models import Comment
 from .forms import CommentForm
 
@@ -48,6 +50,26 @@ class PostListView(ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     ordering = ['published_date']
+
+
+class TagPostListView(ListView):
+    model = Post
+    template_name = 'blog/tag_posts.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get('tag_name')
+        return Post.objects.filter(tags__name=tag_name).order_by('-published_date')
+
+
+def search(request):
+    query = request.GET.get('q', '')
+    results = Post.objects.none()
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)
+        ).distinct().order_by('-published_date')
+    return render(request, 'blog/search_results.html', {'query': query, 'results': results})
 
 class PostDetailView(DetailView):
     model = Post
@@ -100,12 +122,20 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
+    form_class = None
     fields = ['title', 'content']
     template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        tags = form.cleaned_data.get('tags') if hasattr(form, 'cleaned_data') else None
+        if tags:
+            tag_names = [t.strip() for t in tags.split(',') if t.strip()]
+            for name in tag_names:
+                tag, _ = Tag.objects.get_or_create(name=name)
+                self.object.tags.add(tag)
+        return response
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
@@ -114,7 +144,16 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        tags = form.cleaned_data.get('tags') if hasattr(form, 'cleaned_data') else None
+        if tags is not None:
+            # replace tags
+            self.object.tags.clear()
+            tag_names = [t.strip() for t in tags.split(',') if t.strip()]
+            for name in tag_names:
+                tag, _ = Tag.objects.get_or_create(name=name)
+                self.object.tags.add(tag)
+        return response
 
     def test_func(self):
         post = self.get_object()

@@ -3,7 +3,18 @@
 <h1>{% if object %}Edit{% else %}New{% endif %} Post</h1>
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+        {{ form.as_p }}
+        {% if object %}
+            <p>
+                <label for="id_tags">Tags (comma-separated):</label>
+                <input type="text" name="tags" id="id_tags" value="{% for t in object.tags.all %}{{ t.name }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+            </p>
+        {% else %}
+            <p>
+                <label for="id_tags">Tags (comma-separated):</label>
+                <input type="text" name="tags" id="id_tags" value="">
+            </p>
+        {% endif %}
     <button type="submit">Save</button>
 </form>
 {% endblock %}
