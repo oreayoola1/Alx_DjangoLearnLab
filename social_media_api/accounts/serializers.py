@@ -20,3 +20,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         Token.objects.create(user=user)
         return user
+
+User = get_user_model()
+
+class UserSerializer(serializers.ModelSerializer):
+    following_count = serializers.IntegerField(source='following.count', read_only=True)
+    followers_count = serializers.IntegerField(source='followers.count', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'bio', 'profile_picture', 'following_count', 'followers_count']
+        read_only_fields = ['following_count', 'followers_count']
