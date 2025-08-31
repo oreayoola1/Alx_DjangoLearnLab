@@ -9,6 +9,7 @@ from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from .models import CustomUser
+from rest_framework import generics, status
 
 User = get_user_model()
 
@@ -34,7 +35,7 @@ class LoginView(APIView):
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key})
         return Response({'error': 'Invalid credentials'}, status=400)
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
@@ -51,7 +52,7 @@ class FollowUserView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
     queryset = CustomUser.objects.all() 
     permission_classes = [permissions.IsAuthenticated]
 
