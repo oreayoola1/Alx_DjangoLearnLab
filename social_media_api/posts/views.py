@@ -46,12 +46,13 @@ class FeedView(generics.ListAPIView):
         user = self.request.user
         following_users = user.following.all()
         return Post.objects.filter(author__in=following_users).order_by('-created_at')
-    class LikePostView(generics.GenericAPIView):
-     permission_classes = [permissions.IsAuthenticated]
+    
+class LikePostView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
-        # prevent duplicate
+        return Response({"message": f"You liked post {pk}"}, status=status.HTTP_200_OK)
         like, created = Like.objects.get_or_create(user=request.user, post=post)
         if not created:
             return Response({"detail": "Already liked"}, status=status.HTTP_400_BAD_REQUEST)
